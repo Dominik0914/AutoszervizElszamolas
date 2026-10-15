@@ -1,7 +1,8 @@
 ﻿using AutoszervizElszamolas;
 List<Szerelo> jelenlegi = new List<Szerelo>();
 List<int> oszeg = new List<int>();
-foreach (string valami in File.ReadAllLines("szerviz.txt"))
+string[] beolvasott = File.ReadAllLines("szerviz.txt");
+foreach (string valami in beolvasott)
 {
     string[] vagot = valami.Split(";");
     Szerelo aktualis = new Szerelo();
@@ -12,13 +13,14 @@ foreach (string valami in File.ReadAllLines("szerviz.txt"))
     jelenlegi.Add(aktualis);
 
 }
+
 int telj = 0;
 int gara = 0;
 for (int i = 0; i < jelenlegi.Count; i++)
 {
     int oraber = jelenlegi[i].Munkaora * 4000;
     int darabber = jelenlegi[i].JavitottAutok * 5000;
-    if (jelenlegi[i].JavitottAutok <= 6 && jelenlegi[i].Garancialisjavitasok >= 1)
+    if (jelenlegi[i].JavitottAutok >= 6 && jelenlegi[i].Garancialisjavitasok <= 1)
     {
         telj = 15000;
     }
@@ -45,3 +47,6 @@ for (int i = 0;i < jelenlegi.Count();i++)
 Console.WriteLine("Összesített statisztika:");
 Console.WriteLine($"Szervíz által kifizetett teljes munkabér: {oszeg.Sum()} Ft");
 Console.WriteLine($"általános napi munkaóra szerelőként: {jelenlegi.Average(a => a.Munkaora)} óra");
+Console.WriteLine($"Legmagasabb napi bér: {jelenlegi[Array.IndexOf(oszeg.ToArray(), oszeg.Max())].Nev} {oszeg.Max()} Ft");
+Console.WriteLine($"Garanciális hiba nélkül dolgozó szerelők száma: {jelenlegi.Count(a => a.Garancialisjavitasok < 1)} fő");
+
